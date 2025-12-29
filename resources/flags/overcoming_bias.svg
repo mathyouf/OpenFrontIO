@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 100">
+  <rect width="150" height="100" fill="#34495e"/>
+  <line x1="25" y1="75" x2="125" y2="25" stroke="#3498db" stroke-width="8"/>
+  <text x="75" y="90" font-size="14" fill="white" text-anchor="middle" font-family="Arial">OB</text>
+</svg>

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 100">
+  <rect width="150" height="100" fill="#740001"/>
+  <polygon points="75,15 82,35 105,35 87,48 93,70 75,55 57,70 63,48 45,35 68,35" fill="#d3a625"/>
+  <text x="75" y="92" font-size="14" fill="#d3a625" text-anchor="middle" font-family="Georgia">HPMOR</text>
+</svg>

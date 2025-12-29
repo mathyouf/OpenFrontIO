@@ -1,0 +1,245 @@
+{
+  "map": {
+    "height": 1672,
+    "num_land_tiles": 2311229,
+    "width": 2348
+  },
+  "map16x": {
+    "height": 418,
+    "num_land_tiles": 132857,
+    "width": 587
+  },
+  "map4x": {
+    "height": 836,
+    "num_land_tiles": 561490,
+    "width": 1174
+  },
+  "name": "Rationalistsphere",
+  "nations": [
+    {
+      "coordinates": [148, 744],
+      "flag": "lesswrong",
+      "name": "LessWrong Collective"
+    },
+    {
+      "coordinates": [451, 785],
+      "flag": "acx",
+      "name": "Astral Codex Ten"
+    },
+    {
+      "coordinates": [285, 1253],
+      "flag": "miri",
+      "name": "MIRI"
+    },
+    {
+      "coordinates": [527, 979],
+      "flag": "cfar",
+      "name": "Center for Applied Rationality"
+    },
+    {
+      "coordinates": [974, 1159],
+      "flag": "ea_forum",
+      "name": "EA Forum"
+    },
+    {
+      "coordinates": [761, 1013],
+      "flag": "givewell",
+      "name": "GiveWell"
+    },
+    {
+      "coordinates": [789, 451],
+      "flag": "80k_hours",
+      "name": "80,000 Hours"
+    },
+    {
+      "coordinates": [1034, 562],
+      "flag": "fhi",
+      "name": "Future of Humanity Institute"
+    },
+    {
+      "coordinates": [1368, 369],
+      "flag": "openai",
+      "name": "OpenAI"
+    },
+    {
+      "coordinates": [633, 802],
+      "flag": "anthropic",
+      "name": "Anthropic"
+    },
+    {
+      "coordinates": [647, 754],
+      "flag": "deepmind",
+      "name": "DeepMind"
+    },
+    {
+      "coordinates": [904, 805],
+      "flag": "alignment_forum",
+      "name": "Alignment Forum"
+    },
+    {
+      "coordinates": [1082, 953],
+      "flag": "redwood",
+      "name": "Redwood Research"
+    },
+    {
+      "coordinates": [1274, 739],
+      "flag": "arc",
+      "name": "Alignment Research Center"
+    },
+    {
+      "coordinates": [1098, 872],
+      "flag": "conjecture",
+      "name": "Conjecture"
+    },
+    {
+      "coordinates": [1802, 933],
+      "flag": "overcoming_bias",
+      "name": "Overcoming Bias"
+    },
+    {
+      "coordinates": [1562, 730],
+      "flag": "ssc",
+      "name": "Slate Star Codex"
+    },
+    {
+      "coordinates": [1533, 1039],
+      "flag": "manifold",
+      "name": "Manifold Markets"
+    },
+    {
+      "coordinates": [1770, 1304],
+      "flag": "metaculus",
+      "name": "Metaculus"
+    },
+    {
+      "coordinates": [180, 1525],
+      "flag": "polymarket",
+      "name": "Polymarket"
+    },
+    {
+      "coordinates": [2069, 659],
+      "flag": "bayesia",
+      "name": "Kingdom of Bayesia"
+    },
+    {
+      "coordinates": [1952, 1433],
+      "flag": "sequences",
+      "name": "The Sequences"
+    },
+    {
+      "coordinates": [2264, 1529],
+      "flag": "hpmor",
+      "name": "HPMOR Fandom"
+    },
+    {
+      "coordinates": [2173, 1173],
+      "flag": "doomer",
+      "name": "AI Doomers"
+    },
+    {
+      "coordinates": [832, 1434],
+      "flag": "accelerationist",
+      "name": "e/acc Accelerationists"
+    },
+    {
+      "coordinates": [517, 1483],
+      "flag": "decelerationist",
+      "name": "AI Decelerationists"
+    },
+    {
+      "coordinates": [89, 1292],
+      "flag": "longtermism",
+      "name": "Longtermist Coalition"
+    },
+    {
+      "coordinates": [1335, 1312],
+      "flag": "neartermism",
+      "name": "Neartermist Alliance"
+    },
+    {
+      "coordinates": [1312, 1133],
+      "flag": "superforecasters",
+      "name": "Superforecasters"
+    },
+    {
+      "coordinates": [1281, 999],
+      "flag": "themotte",
+      "name": "The Motte"
+    },
+    {
+      "coordinates": [1254, 899],
+      "flag": "rationalist_tumblr",
+      "name": "Rationalist Tumblr"
+    },
+    {
+      "coordinates": [1002, 1061],
+      "flag": "sneerclub",
+      "name": "SneerClub"
+    },
+    {
+      "coordinates": [1174, 1108],
+      "flag": "moloch",
+      "name": "Moloch"
+    },
+    {
+      "coordinates": [1259, 1236],
+      "flag": "basilisk",
+      "name": "Roko's Basilisk"
+    },
+    {
+      "coordinates": [1556, 1200],
+      "flag": "paperclip_maximizer",
+      "name": "Paperclip Maximizer"
+    },
+    {
+      "coordinates": [1380, 618],
+      "flag": "utility_monster",
+      "name": "Utility Monster"
+    },
+    {
+      "coordinates": [1360, 556],
+      "flag": "orthogonality",
+      "name": "Orthogonality Thesis"
+    },
+    {
+      "coordinates": [1443, 502],
+      "flag": "cev",
+      "name": "Coherent Extrapolated Volition"
+    },
+    {
+      "coordinates": [278, 742],
+      "flag": "simulacra",
+      "name": "Simulacra Levels"
+    },
+    {
+      "coordinates": [296, 601],
+      "flag": "inadequate_equilibria",
+      "name": "Inadequate Equilibria"
+    },
+    {
+      "coordinates": [2300, 510],
+      "flag": "pivotal_act",
+      "name": "Pivotal Act Proponents"
+    },
+    {
+      "coordinates": [204, 667],
+      "flag": "corrigibility",
+      "name": "Corrigibility Research"
+    },
+    {
+      "coordinates": [1522, 48],
+      "flag": "mesa_optimizer",
+      "name": "Mesa-Optimizer"
+    },
+    {
+      "coordinates": [821, 628],
+      "flag": "inner_alignment",
+      "name": "Inner Alignment"
+    },
+    {
+      "coordinates": [1875, 1599],
+      "flag": "outer_alignment",
+      "name": "Outer Alignment"
+    }
+  ]
+}

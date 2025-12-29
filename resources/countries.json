@@ -2335,5 +2335,185 @@
     "code": "zw",
     "continent": "Africa",
     "name": "Zimbabwe"
+  },
+  {
+    "code": "lesswrong",
+    "name": "LessWrong Collective"
+  },
+  {
+    "code": "miri",
+    "name": "MIRI (Machine Intelligence Research Institute)"
+  },
+  {
+    "code": "acx",
+    "name": "Astral Codex Ten"
+  },
+  {
+    "code": "overcoming_bias",
+    "name": "Overcoming Bias"
+  },
+  {
+    "code": "cfar",
+    "name": "Center for Applied Rationality"
+  },
+  {
+    "code": "fhi",
+    "name": "Future of Humanity Institute"
+  },
+  {
+    "code": "givewell",
+    "name": "GiveWell"
+  },
+  {
+    "code": "80k_hours",
+    "name": "80,000 Hours"
+  },
+  {
+    "code": "bayesia",
+    "name": "Kingdom of Bayesia"
+  },
+  {
+    "code": "sequences",
+    "name": "The Sequences"
+  },
+  {
+    "code": "ea_forum",
+    "name": "EA Forum"
+  },
+  {
+    "code": "alignment_forum",
+    "name": "Alignment Forum"
+  },
+  {
+    "code": "manifold",
+    "name": "Manifold Markets"
+  },
+  {
+    "code": "metaculus",
+    "name": "Metaculus"
+  },
+  {
+    "code": "polymarket",
+    "name": "Polymarket"
+  },
+  {
+    "code": "rationalist_tumblr",
+    "name": "Rationalist Tumblr"
+  },
+  {
+    "code": "sneerclub",
+    "name": "SneerClub"
+  },
+  {
+    "code": "themotte",
+    "name": "The Motte"
+  },
+  {
+    "code": "ssc",
+    "name": "Slate Star Codex"
+  },
+  {
+    "code": "hpmor",
+    "name": "HPMOR Fandom"
+  },
+  {
+    "code": "openai",
+    "name": "OpenAI"
+  },
+  {
+    "code": "anthropic",
+    "name": "Anthropic"
+  },
+  {
+    "code": "deepmind",
+    "name": "DeepMind"
+  },
+  {
+    "code": "conjecture",
+    "name": "Conjecture"
+  },
+  {
+    "code": "redwood",
+    "name": "Redwood Research"
+  },
+  {
+    "code": "arc",
+    "name": "Alignment Research Center"
+  },
+  {
+    "code": "orthogonality",
+    "name": "Orthogonality Thesis"
+  },
+  {
+    "code": "basilisk",
+    "name": "Roko's Basilisk"
+  },
+  {
+    "code": "paperclip_maximizer",
+    "name": "Paperclip Maximizer"
+  },
+  {
+    "code": "cev",
+    "name": "Coherent Extrapolated Volition"
+  },
+  {
+    "code": "utility_monster",
+    "name": "Utility Monster"
+  },
+  {
+    "code": "simulacra",
+    "name": "Simulacra Levels"
+  },
+  {
+    "code": "moloch",
+    "name": "Moloch"
+  },
+  {
+    "code": "inadequate_equilibria",
+    "name": "Inadequate Equilibria"
+  },
+  {
+    "code": "superforecasters",
+    "name": "Superforecasters"
+  },
+  {
+    "code": "doomer",
+    "name": "AI Doomers"
+  },
+  {
+    "code": "accelerationist",
+    "name": "e/acc Accelerationists"
+  },
+  {
+    "code": "decelerationist",
+    "name": "AI Decelerationists"
+  },
+  {
+    "code": "longtermism",
+    "name": "Longtermist Coalition"
+  },
+  {
+    "code": "neartermism",
+    "name": "Neartermist Alliance"
+  },
+  {
+    "code": "pivotal_act",
+    "name": "Pivotal Act Proponents"
+  },
+  {
+    "code": "corrigibility",
+    "name": "Corrigibility Research"
+  },
+  {
+    "code": "mesa_optimizer",
+    "name": "Mesa-Optimizer"
+  },
+  {
+    "code": "inner_alignment",
+    "name": "Inner Alignment"
+  },
+  {
+    "code": "outer_alignment",
+    "name": "Outer Alignment"
   }
 ]

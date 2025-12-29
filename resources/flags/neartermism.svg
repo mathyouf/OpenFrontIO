@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 100">
+  <rect width="150" height="100" fill="#15803d"/>
+  <circle cx="75" cy="50" r="25" fill="#fbbf24"/>
+  <text x="75" y="58" font-size="20" fill="#15803d" text-anchor="middle" font-family="Arial" font-weight="bold">NOW</text>
+</svg>

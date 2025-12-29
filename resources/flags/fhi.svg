@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 100">
+  <rect width="150" height="100" fill="#002147"/>
+  <circle cx="75" cy="50" r="25" fill="none" stroke="#f4d03f" stroke-width="4"/>
+  <text x="75" y="57" font-size="16" fill="#f4d03f" text-anchor="middle" font-family="Arial" font-weight="bold">FHI</text>
+</svg>
