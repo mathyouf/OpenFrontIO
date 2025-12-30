@@ -1,0 +1,33 @@
+# Fly.io configuration for RationalistFront
+# Deploy: fly launch --dockerfile Dockerfile.simple
+#
+# Fly.io is excellent for WebSocket applications with global edge deployment.
+
+app = "rationalistfront"
+primary_region = "iad"
+
+[build]
+  dockerfile = "Dockerfile.simple"
+
+[env]
+  NODE_ENV = "production"
+  GAME_ENV = "prod"
+  PORT = "3000"
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+  [http_service.concurrency]
+    type = "connections"
+    hard_limit = 250
+    soft_limit = 200
+
+[[vm]]
+  memory = "512mb"
+  cpu_kind = "shared"
+  cpus = 1

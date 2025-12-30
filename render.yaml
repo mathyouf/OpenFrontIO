@@ -1,0 +1,29 @@
+# Render Blueprint for RationalistFront
+# Deploy: https://dashboard.render.com/select-repo?type=blueprint
+#
+# This creates a web service that auto-deploys on push.
+# Free tier available!
+
+services:
+  - type: web
+    name: rationalistfront
+    runtime: docker
+    dockerfilePath: ./Dockerfile.simple
+    dockerContext: .
+    # Free tier
+    plan: free
+    # Auto-deploy on push
+    autoDeploy: true
+    # Health check
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: GAME_ENV
+        value: prod
+      - key: PORT
+        value: 3000
+
+# Preview environments for PRs
+previewsEnabled: true
+previewsExpireAfterDays: 7
