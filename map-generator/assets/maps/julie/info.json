@@ -1,0 +1,45 @@
+{
+  "name": "Julie",
+  "nations": [
+    {
+      "coordinates": [550, 180],
+      "name": "Northern Highlands",
+      "flag": "lesswrong"
+    },
+    {
+      "coordinates": [750, 250],
+      "name": "Eastern Forest",
+      "flag": "miri"
+    },
+    {
+      "coordinates": [350, 300],
+      "name": "Western Woods",
+      "flag": "anthropic"
+    },
+    {
+      "coordinates": [600, 400],
+      "name": "Central Plains",
+      "flag": "openai"
+    },
+    {
+      "coordinates": [450, 500],
+      "name": "Southern Valley",
+      "flag": "deepmind"
+    },
+    {
+      "coordinates": [700, 550],
+      "name": "Southeast Coast",
+      "flag": "acx"
+    },
+    {
+      "coordinates": [300, 600],
+      "name": "Southwest Bay",
+      "flag": "ea"
+    },
+    {
+      "coordinates": [550, 700],
+      "name": "Southern Shores",
+      "flag": "givewell"
+    }
+  ]
+}
