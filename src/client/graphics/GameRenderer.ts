@@ -176,6 +176,7 @@ export function createRenderer(
     console.error("balance panel not found");
   }
   balancePanel.game = game;
+  balancePanel.init();
 
   const unitDisplay = document.querySelector("unit-display") as UnitDisplay;
   if (!(unitDisplay instanceof UnitDisplay)) {

@@ -6,7 +6,7 @@ import { Layer } from "./Layer";
 
 @customElement("balance-panel")
 export class BalancePanel extends LitElement implements Layer {
-  public game: GameView;
+  @state() public game: GameView;
 
   @state()
   private isCollapsed: boolean = false; // Start expanded so it's visible
