@@ -152,6 +152,7 @@ export class BalancePanel extends LitElement implements Layer {
       spawnImmunityModifier: this.spawnImmunityModifier,
       allianceDurationModifier: this.allianceDurationModifier,
     };
+    console.log("BalancePanel sending config updates:", updates);
     // Update local config for display
     this.game.config().updateGameConfig(updates);
     // Send updates to the worker where game simulation runs

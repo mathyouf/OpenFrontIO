@@ -177,7 +177,12 @@ ctx.addEventListener("message", async (e: MessageEvent<MainThreadMessage>) => {
 
       try {
         const gr = await gameRunner;
+        console.log("Worker received config update:", message.updates);
         gr.game.config().updateGameConfig(message.updates);
+        console.log(
+          "Worker applied config, troopGen modifier is now:",
+          gr.game.config().gameConfig().troopGenerationModifier,
+        );
       } catch (error) {
         console.error("Failed to update game config:", error);
       }

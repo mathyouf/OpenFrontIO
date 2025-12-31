@@ -256,7 +256,9 @@ export class DefaultConfig implements Config {
   }
 
   updateGameConfig(updates: Partial<GameConfig>): void {
+    console.log("DefaultConfig.updateGameConfig called with:", updates);
     this._gameConfig = { ...this._gameConfig, ...updates };
+    console.log("DefaultConfig._gameConfig is now:", this._gameConfig);
   }
 
   serverConfig(): ServerConfig {
