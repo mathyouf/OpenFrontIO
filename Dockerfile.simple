@@ -8,6 +8,9 @@ WORKDIR /app
 FROM base AS build
 ENV HUSKY=0
 
+# Install procps for 'ps' command (needed by concurrently)
+RUN apt-get update && apt-get install -y procps && rm -rf /var/lib/apt/lists/*
+
 # Copy package files for caching
 COPY package*.json ./
 RUN npm ci
