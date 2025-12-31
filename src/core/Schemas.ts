@@ -193,6 +193,21 @@ export const GameConfigSchema = z.object({
   tradeShipSpawnModifier: z.number().min(0.1).max(5).optional(),
   warshipSpawnModifier: z.number().min(0.1).max(5).optional(),
   boatCapacityModifier: z.number().min(0.5).max(5).optional(),
+  // Nuke modifiers
+  nukeMagnitudeModifier: z.number().min(0.1).max(5).optional(),
+  nukeSpeedModifier: z.number().min(0.1).max(5).optional(),
+  samRangeModifier: z.number().min(0.1).max(3).optional(),
+  // Combat range modifiers
+  defensePostRangeModifier: z.number().min(0.1).max(3).optional(),
+  warshipRangeModifier: z.number().min(0.1).max(3).optional(),
+  // Player modifiers
+  maxTroopsModifier: z.number().min(0.1).max(5).optional(),
+  spawnImmunityModifier: z.number().min(0.1).max(5).optional(),
+  // Diplomacy modifiers
+  allianceDurationModifier: z.number().min(0.1).max(5).optional(),
+  // Warship combat
+  warshipHealthModifier: z.number().min(0.1).max(5).optional(),
+  shellDamageModifier: z.number().min(0.1).max(5).optional(),
 });
 
 export const TeamSchema = z.string();

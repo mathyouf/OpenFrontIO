@@ -20,6 +20,7 @@ export class BalancePanel extends LitElement implements Layer {
   @state() private troopGenerationModifier: number = 1.0;
   @state() private goldGenerationModifier: number = 1.0;
   @state() private gameSpeedModifier: number = 1.0;
+  @state() private maxTroopsModifier: number = 1.0;
 
   // Cost modifiers
   @state() private buildCostModifier: number = 1.0;
@@ -33,6 +34,21 @@ export class BalancePanel extends LitElement implements Layer {
   @state() private tradeShipSpawnModifier: number = 1.0;
   @state() private warshipSpawnModifier: number = 1.0;
   @state() private boatCapacityModifier: number = 1.0;
+  @state() private warshipHealthModifier: number = 1.0;
+  @state() private shellDamageModifier: number = 1.0;
+  @state() private warshipRangeModifier: number = 1.0;
+
+  // Nuke modifiers
+  @state() private nukeMagnitudeModifier: number = 1.0;
+  @state() private nukeSpeedModifier: number = 1.0;
+  @state() private samRangeModifier: number = 1.0;
+
+  // Range modifiers
+  @state() private defensePostRangeModifier: number = 1.0;
+
+  // Gameplay modifiers
+  @state() private spawnImmunityModifier: number = 1.0;
+  @state() private allianceDurationModifier: number = 1.0;
 
   init() {
     if (this.game && this.isSingleplayer()) {
@@ -42,18 +58,35 @@ export class BalancePanel extends LitElement implements Layer {
 
   private loadFromConfig() {
     const config = this.game.config().gameConfig();
+    // Combat
     this.attackModifier = config.attackModifier ?? 1.0;
     this.defenseModifier = config.defenseModifier ?? 1.0;
     this.troopGenerationModifier = config.troopGenerationModifier ?? 1.0;
     this.goldGenerationModifier = config.goldGenerationModifier ?? 1.0;
     this.gameSpeedModifier = config.gameSpeedModifier ?? 1.0;
+    this.maxTroopsModifier = config.maxTroopsModifier ?? 1.0;
+    // Costs
     this.buildCostModifier = config.buildCostModifier ?? 1.0;
     this.nukeCostModifier = config.nukeCostModifier ?? 1.0;
+    // AI
     this.botAggressionModifier = config.botAggressionModifier ?? 1.0;
     this.nationStrengthModifier = config.nationStrengthModifier ?? 1.0;
+    // Naval
     this.tradeShipSpawnModifier = config.tradeShipSpawnModifier ?? 1.0;
     this.warshipSpawnModifier = config.warshipSpawnModifier ?? 1.0;
     this.boatCapacityModifier = config.boatCapacityModifier ?? 1.0;
+    this.warshipHealthModifier = config.warshipHealthModifier ?? 1.0;
+    this.shellDamageModifier = config.shellDamageModifier ?? 1.0;
+    this.warshipRangeModifier = config.warshipRangeModifier ?? 1.0;
+    // Nukes
+    this.nukeMagnitudeModifier = config.nukeMagnitudeModifier ?? 1.0;
+    this.nukeSpeedModifier = config.nukeSpeedModifier ?? 1.0;
+    this.samRangeModifier = config.samRangeModifier ?? 1.0;
+    // Ranges
+    this.defensePostRangeModifier = config.defensePostRangeModifier ?? 1.0;
+    // Gameplay
+    this.spawnImmunityModifier = config.spawnImmunityModifier ?? 1.0;
+    this.allianceDurationModifier = config.allianceDurationModifier ?? 1.0;
   }
 
   private isSingleplayer(): boolean {
@@ -86,41 +119,76 @@ export class BalancePanel extends LitElement implements Layer {
   private applyAllModifiers() {
     if (!this.game) return;
     this.game.config().updateGameConfig({
+      // Combat
       attackModifier: this.attackModifier,
       defenseModifier: this.defenseModifier,
       troopGenerationModifier: this.troopGenerationModifier,
       goldGenerationModifier: this.goldGenerationModifier,
       gameSpeedModifier: this.gameSpeedModifier,
+      maxTroopsModifier: this.maxTroopsModifier,
+      // Costs
       buildCostModifier: this.buildCostModifier,
       nukeCostModifier: this.nukeCostModifier,
+      // AI
       botAggressionModifier: this.botAggressionModifier,
       nationStrengthModifier: this.nationStrengthModifier,
+      // Naval
       tradeShipSpawnModifier: this.tradeShipSpawnModifier,
       warshipSpawnModifier: this.warshipSpawnModifier,
       boatCapacityModifier: this.boatCapacityModifier,
+      warshipHealthModifier: this.warshipHealthModifier,
+      shellDamageModifier: this.shellDamageModifier,
+      warshipRangeModifier: this.warshipRangeModifier,
+      // Nukes
+      nukeMagnitudeModifier: this.nukeMagnitudeModifier,
+      nukeSpeedModifier: this.nukeSpeedModifier,
+      samRangeModifier: this.samRangeModifier,
+      // Ranges
+      defensePostRangeModifier: this.defensePostRangeModifier,
+      // Gameplay
+      spawnImmunityModifier: this.spawnImmunityModifier,
+      allianceDurationModifier: this.allianceDurationModifier,
     });
   }
 
   private resetAll() {
+    // Combat
     this.attackModifier = 1.0;
     this.defenseModifier = 1.0;
     this.troopGenerationModifier = 1.0;
     this.goldGenerationModifier = 1.0;
     this.gameSpeedModifier = 1.0;
+    this.maxTroopsModifier = 1.0;
+    // Costs
     this.buildCostModifier = 1.0;
     this.nukeCostModifier = 1.0;
+    // AI
     this.botAggressionModifier = 1.0;
     this.nationStrengthModifier = 1.0;
+    // Naval
     this.tradeShipSpawnModifier = 1.0;
     this.warshipSpawnModifier = 1.0;
     this.boatCapacityModifier = 1.0;
+    this.warshipHealthModifier = 1.0;
+    this.shellDamageModifier = 1.0;
+    this.warshipRangeModifier = 1.0;
+    // Nukes
+    this.nukeMagnitudeModifier = 1.0;
+    this.nukeSpeedModifier = 1.0;
+    this.samRangeModifier = 1.0;
+    // Ranges
+    this.defensePostRangeModifier = 1.0;
+    // Gameplay
+    this.spawnImmunityModifier = 1.0;
+    this.allianceDurationModifier = 1.0;
+
     this.applyAllModifiers();
     this.requestUpdate();
   }
 
   private onSliderChange(field: string, event: Event) {
     const value = parseFloat((event.target as HTMLInputElement).value);
-    (this as Record<string, number>)[field] = value;
+    (this as unknown as Record<string, number>)[field] = value;
     this.applyAllModifiers();
     this.requestUpdate();
   }
@@ -132,7 +200,7 @@ export class BalancePanel extends LitElement implements Layer {
     max: number,
     step: number = 0.1,
   ) {
-    const value = (this as Record<string, number>)[field];
+    const value = (this as unknown as Record<string, number>)[field];
     return html`
       <div class="flex items-center gap-2 py-1">
         <div class="text-xs text-slate-300 w-20 truncate" title="${label}">
@@ -212,13 +280,27 @@ export class BalancePanel extends LitElement implements Layer {
           ${this.renderSection("combat", "Combat & Economy", [
             this.renderSlider("Attack", "attackModifier", 0.1, 5),
             this.renderSlider("Defense", "defenseModifier", 0.1, 5),
-            this.renderSlider("Troops", "troopGenerationModifier", 0.1, 5),
-            this.renderSlider("Gold", "goldGenerationModifier", 0.1, 5),
-            this.renderSlider("Speed", "gameSpeedModifier", 0.5, 3),
+            this.renderSlider("Troops Gen", "troopGenerationModifier", 0.1, 5),
+            this.renderSlider("Gold Gen", "goldGenerationModifier", 0.1, 5),
+            this.renderSlider("Max Troops", "maxTroopsModifier", 0.1, 5),
+            this.renderSlider("Game Speed", "gameSpeedModifier", 0.5, 3),
           ])}
           ${this.renderSection("costs", "Costs", [
             this.renderSlider("Build Cost", "buildCostModifier", 0.1, 5),
             this.renderSlider("Nuke Cost", "nukeCostModifier", 0.1, 5),
+          ])}
+          ${this.renderSection("nukes", "Nuclear Weapons", [
+            this.renderSlider("Blast Radius", "nukeMagnitudeModifier", 0.1, 5),
+            this.renderSlider("Nuke Speed", "nukeSpeedModifier", 0.1, 5),
+            this.renderSlider("SAM Range", "samRangeModifier", 0.1, 3),
+          ])}
+          ${this.renderSection("naval", "Naval Combat", [
+            this.renderSlider("Trade Ships", "tradeShipSpawnModifier", 0.1, 5),
+            this.renderSlider("Warships", "warshipSpawnModifier", 0.1, 5),
+            this.renderSlider("Boat Limit", "boatCapacityModifier", 0.5, 5),
+            this.renderSlider("Ship Health", "warshipHealthModifier", 0.1, 5),
+            this.renderSlider("Shell Damage", "shellDamageModifier", 0.1, 5),
+            this.renderSlider("Ship Range", "warshipRangeModifier", 0.1, 3),
           ])}
           ${this.renderSection("ai", "AI Behavior", [
             this.renderSlider(
@@ -234,10 +316,27 @@ export class BalancePanel extends LitElement implements Layer {
               3,
             ),
           ])}
-          ${this.renderSection("naval", "Naval", [
-            this.renderSlider("Trade Ships", "tradeShipSpawnModifier", 0.1, 5),
-            this.renderSlider("Warships", "warshipSpawnModifier", 0.1, 5),
-            this.renderSlider("Boat Capacity", "boatCapacityModifier", 0.5, 5),
+          ${this.renderSection("ranges", "Ranges & Defense", [
+            this.renderSlider(
+              "Def Post Range",
+              "defensePostRangeModifier",
+              0.1,
+              3,
+            ),
+          ])}
+          ${this.renderSection("gameplay", "Gameplay", [
+            this.renderSlider(
+              "Spawn Immunity",
+              "spawnImmunityModifier",
+              0.1,
+              5,
+            ),
+            this.renderSlider(
+              "Alliance Time",
+              "allianceDurationModifier",
+              0.1,
+              5,
+            ),
           ])}
         </div>
 

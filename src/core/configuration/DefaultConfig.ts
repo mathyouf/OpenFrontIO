@@ -246,7 +246,9 @@ export class DefaultConfig implements Config {
     return 30 * 10; // 30 seconds
   }
   spawnImmunityDuration(): Tick {
-    return 5 * 10;
+    const base = 5 * 10;
+    const modifier = this._gameConfig.spawnImmunityModifier ?? 1;
+    return Math.floor(base * modifier);
   }
 
   gameConfig(): GameConfig {
@@ -285,7 +287,9 @@ export class DefaultConfig implements Config {
   }
 
   defensePostRange(): number {
-    return 30;
+    const base = 30;
+    const modifier = this._gameConfig.defensePostRangeModifier ?? 1;
+    return Math.floor(base * modifier);
   }
 
   defensePostDefenseBonus(): number {
@@ -415,21 +419,25 @@ export class DefaultConfig implements Config {
           cost: () => 0n,
           territoryBound: false,
         };
-      case UnitType.Warship:
+      case UnitType.Warship: {
+        const healthMod = this._gameConfig.warshipHealthModifier ?? 1;
         return {
           cost: this.costWrapper(
             (numUnits: number) => Math.min(1_000_000, (numUnits + 1) * 250_000),
             UnitType.Warship,
           ),
           territoryBound: false,
-          maxHealth: 1000,
+          maxHealth: Math.floor(1000 * healthMod),
         };
-      case UnitType.Shell:
+      }
+      case UnitType.Shell: {
+        const damageMod = this._gameConfig.shellDamageModifier ?? 1;
         return {
           cost: () => 0n,
           territoryBound: false,
-          damage: 250,
+          damage: Math.floor(250 * damageMod),
         };
+      }
       case UnitType.SAMMissile:
         return {
           cost: () => 0n,
@@ -612,7 +620,9 @@ export class DefaultConfig implements Config {
     return 30 * 10;
   }
   allianceDuration(): Tick {
-    return 300 * 10; // 5 minutes.
+    const base = 300 * 10; // 5 minutes base
+    const modifier = this._gameConfig.allianceDurationModifier ?? 1;
+    return Math.floor(base * modifier);
   }
   temporaryEmbargoDuration(): Tick {
     return 300 * 10; // 5 minutes.
@@ -842,7 +852,8 @@ export class DefaultConfig implements Config {
   }
 
   maxTroops(player: Player | PlayerView): number {
-    const maxTroops =
+    const maxTroopsMod = this._gameConfig.maxTroopsModifier ?? 1;
+    const baseMaxTroops =
       player.type() === PlayerType.Human && this.infiniteTroops()
         ? 1_000_000_000
         : 2 * (Math.pow(player.numTilesOwned(), 0.6) * 1000 + 50000) +
@@ -851,6 +862,8 @@ export class DefaultConfig implements Config {
             .map((city) => city.level())
             .reduce((a, b) => a + b, 0) *
             this.cityTroopIncrease();
+
+    const maxTroops = baseMaxTroops * maxTroopsMod;
 
     if (player.type() === PlayerType.Bot) {
       return maxTroops / 3;
@@ -926,15 +939,28 @@ export class DefaultConfig implements Config {
   }
 
   nukeMagnitudes(unitType: UnitType): NukeMagnitude {
+    const magMod = this._gameConfig.nukeMagnitudeModifier ?? 1;
+    let inner: number, outer: number;
     switch (unitType) {
       case UnitType.MIRVWarhead:
-        return { inner: 12, outer: 18 };
+        inner = 12;
+        outer = 18;
+        break;
       case UnitType.AtomBomb:
-        return { inner: 12, outer: 30 };
+        inner = 12;
+        outer = 30;
+        break;
       case UnitType.HydrogenBomb:
-        return { inner: 80, outer: 100 };
+        inner = 80;
+        outer = 100;
+        break;
+      default:
+        throw new Error(`Unknown nuke type: ${unitType}`);
     }
-    throw new Error(`Unknown nuke type: ${unitType}`);
+    return {
+      inner: Math.floor(inner * magMod),
+      outer: Math.floor(outer * magMod),
+    };
   }
 
   nukeAllianceBreakThreshold(): number {
@@ -942,7 +968,9 @@ export class DefaultConfig implements Config {
   }
 
   defaultNukeSpeed(): number {
-    return 6;
+    const base = 6;
+    const modifier = this._gameConfig.nukeSpeedModifier ?? 1;
+    return base * modifier;
   }
 
   defaultNukeTargetableRange(): number {
@@ -950,16 +978,22 @@ export class DefaultConfig implements Config {
   }
 
   defaultSamRange(): number {
-    return 70;
+    const base = 70;
+    const modifier = this._gameConfig.samRangeModifier ?? 1;
+    return Math.floor(base * modifier);
   }
 
   samRange(level: number): number {
     // rational growth function (level 1 = 70, level 5 just above hydro range, asymptotically approaches 150)
-    return this.maxSamRange() - 480 / (level + 5);
+    const modifier = this._gameConfig.samRangeModifier ?? 1;
+    const maxRange = this.maxSamRange();
+    return (maxRange - 480 / (level + 5)) * modifier;
   }
 
   maxSamRange(): number {
-    return 150;
+    const base = 150;
+    const modifier = this._gameConfig.samRangeModifier ?? 1;
+    return Math.floor(base * modifier);
   }
 
   defaultSamMissileSpeed(): number {
@@ -994,11 +1028,15 @@ export class DefaultConfig implements Config {
   }
 
   warshipPatrolRange(): number {
-    return 100;
+    const base = 100;
+    const modifier = this._gameConfig.warshipRangeModifier ?? 1;
+    return Math.floor(base * modifier);
   }
 
   warshipTargettingRange(): number {
-    return 130;
+    const base = 130;
+    const modifier = this._gameConfig.warshipRangeModifier ?? 1;
+    return Math.floor(base * modifier);
   }
 
   warshipShellAttackRate(): number {
