@@ -1,6 +1,8 @@
 import { html, LitElement } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { EventBus } from "../../../core/EventBus";
+import { GameType } from "../../../core/game/Game";
+import { GameView } from "../../../core/game/GameView";
 import { UserSettings } from "../../../core/game/UserSettings";
 import { AlternateViewEvent, RefreshGraphicsEvent } from "../../InputHandler";
 import { PauseGameIntentEvent } from "../../Transport";
@@ -15,7 +17,10 @@ import exitIcon from "/images/ExitIconWhite.svg?url";
 import explosionIcon from "/images/ExplosionIconWhite.svg?url";
 import mouseIcon from "/images/MouseIconWhite.svg?url";
 import ninjaIcon from "/images/NinjaIconWhite.svg?url";
-import settingsIcon from "/images/SettingIconWhite.svg?url";
+import {
+  default as settingsIcon,
+  default as slidersIcon,
+} from "/images/SettingIconWhite.svg?url";
 import sirenIcon from "/images/SirenIconWhite.svg?url";
 import treeIcon from "/images/TreeIconWhite.svg?url";
 import musicIcon from "/images/music.svg?url";
@@ -32,12 +37,31 @@ export class ShowSettingsModalEvent {
 export class SettingsModal extends LitElement implements Layer {
   public eventBus: EventBus;
   public userSettings: UserSettings;
+  public game: GameView;
 
   @state()
   private isVisible: boolean = false;
 
   @state()
   private alternateView: boolean = false;
+
+  @state()
+  private showBalanceSettings: boolean = false;
+
+  @state()
+  private attackModifier: number = 1.0;
+
+  @state()
+  private defenseModifier: number = 1.0;
+
+  @state()
+  private troopGenerationModifier: number = 1.0;
+
+  @state()
+  private goldGenerationModifier: number = 1.0;
+
+  @state()
+  private gameSpeedModifier: number = 1.0;
 
   @query(".modal-overlay")
   private modalOverlay!: HTMLElement;
@@ -58,7 +82,22 @@ export class SettingsModal extends LitElement implements Layer {
       this.shouldPause = event.shouldPause;
       this.wasPausedWhenOpened = event.isPaused;
       this.pauseGame(true);
+      // Load current modifier values from game config
+      if (this.game && this.isSingleplayer()) {
+        const config = this.game.config().gameConfig();
+        this.attackModifier = config.attackModifier ?? 1.0;
+        this.defenseModifier = config.defenseModifier ?? 1.0;
+        this.troopGenerationModifier = config.troopGenerationModifier ?? 1.0;
+        this.goldGenerationModifier = config.goldGenerationModifier ?? 1.0;
+        this.gameSpeedModifier = config.gameSpeedModifier ?? 1.0;
+      }
     });
+  }
+
+  private isSingleplayer(): boolean {
+    if (!this.game) return false;
+    const gameType = this.game.config().gameConfig().gameType;
+    return gameType === GameType.Singleplayer;
   }
 
   createRenderRoot() {
@@ -180,6 +219,203 @@ export class SettingsModal extends LitElement implements Layer {
     this.userSettings.setSoundEffectsVolume(volume);
     SoundManager.setSoundEffectsVolume(volume);
     this.requestUpdate();
+  }
+
+  private onToggleBalanceSettings() {
+    this.showBalanceSettings = !this.showBalanceSettings;
+    this.requestUpdate();
+  }
+
+  private onAttackModifierChange(event: Event) {
+    this.attackModifier = parseFloat((event.target as HTMLInputElement).value);
+    this.applyBalanceModifiers();
+    this.requestUpdate();
+  }
+
+  private onDefenseModifierChange(event: Event) {
+    this.defenseModifier = parseFloat((event.target as HTMLInputElement).value);
+    this.applyBalanceModifiers();
+    this.requestUpdate();
+  }
+
+  private onTroopGenerationModifierChange(event: Event) {
+    this.troopGenerationModifier = parseFloat(
+      (event.target as HTMLInputElement).value,
+    );
+    this.applyBalanceModifiers();
+    this.requestUpdate();
+  }
+
+  private onGoldGenerationModifierChange(event: Event) {
+    this.goldGenerationModifier = parseFloat(
+      (event.target as HTMLInputElement).value,
+    );
+    this.applyBalanceModifiers();
+    this.requestUpdate();
+  }
+
+  private onGameSpeedModifierChange(event: Event) {
+    this.gameSpeedModifier = parseFloat(
+      (event.target as HTMLInputElement).value,
+    );
+    this.applyBalanceModifiers();
+    this.requestUpdate();
+  }
+
+  private applyBalanceModifiers() {
+    if (!this.game) return;
+    this.game.config().updateGameConfig({
+      attackModifier: this.attackModifier,
+      defenseModifier: this.defenseModifier,
+      troopGenerationModifier: this.troopGenerationModifier,
+      goldGenerationModifier: this.goldGenerationModifier,
+      gameSpeedModifier: this.gameSpeedModifier,
+    });
+  }
+
+  private resetBalanceModifiers() {
+    this.attackModifier = 1.0;
+    this.defenseModifier = 1.0;
+    this.troopGenerationModifier = 1.0;
+    this.goldGenerationModifier = 1.0;
+    this.gameSpeedModifier = 1.0;
+    this.applyBalanceModifiers();
+    this.requestUpdate();
+  }
+
+  private renderBalanceSettings() {
+    return html`
+      <div class="border-t border-slate-600 pt-3 mt-4">
+        <button
+          class="flex gap-3 items-center w-full text-left p-3 hover:bg-slate-700 rounded text-white transition-colors"
+          @click="${this.onToggleBalanceSettings}"
+        >
+          <img src=${slidersIcon} alt="balance" width="20" height="20" />
+          <div class="flex-1">
+            <div class="font-medium">Game Balance (Advanced)</div>
+            <div class="text-sm text-slate-400">
+              Adjust game mechanics in real-time
+            </div>
+          </div>
+          <div class="text-sm text-slate-400">
+            ${this.showBalanceSettings ? "▼" : "▶"}
+          </div>
+        </button>
+
+        ${this.showBalanceSettings
+          ? html`
+              <div class="ml-8 mt-2 space-y-3">
+                <div
+                  class="flex gap-3 items-center w-full text-left p-3 bg-slate-700/50 rounded text-white"
+                >
+                  <div class="flex-1">
+                    <div class="font-medium text-sm">Attack Power</div>
+                    <input
+                      type="range"
+                      min="0.1"
+                      max="5"
+                      step="0.1"
+                      .value=${this.attackModifier.toString()}
+                      @input=${this.onAttackModifierChange}
+                      class="w-full border border-slate-500 rounded-lg"
+                    />
+                  </div>
+                  <div class="text-sm text-slate-400 w-12 text-right">
+                    ${this.attackModifier.toFixed(1)}x
+                  </div>
+                </div>
+
+                <div
+                  class="flex gap-3 items-center w-full text-left p-3 bg-slate-700/50 rounded text-white"
+                >
+                  <div class="flex-1">
+                    <div class="font-medium text-sm">Defense Power</div>
+                    <input
+                      type="range"
+                      min="0.1"
+                      max="5"
+                      step="0.1"
+                      .value=${this.defenseModifier.toString()}
+                      @input=${this.onDefenseModifierChange}
+                      class="w-full border border-slate-500 rounded-lg"
+                    />
+                  </div>
+                  <div class="text-sm text-slate-400 w-12 text-right">
+                    ${this.defenseModifier.toFixed(1)}x
+                  </div>
+                </div>
+
+                <div
+                  class="flex gap-3 items-center w-full text-left p-3 bg-slate-700/50 rounded text-white"
+                >
+                  <div class="flex-1">
+                    <div class="font-medium text-sm">Troop Generation</div>
+                    <input
+                      type="range"
+                      min="0.1"
+                      max="5"
+                      step="0.1"
+                      .value=${this.troopGenerationModifier.toString()}
+                      @input=${this.onTroopGenerationModifierChange}
+                      class="w-full border border-slate-500 rounded-lg"
+                    />
+                  </div>
+                  <div class="text-sm text-slate-400 w-12 text-right">
+                    ${this.troopGenerationModifier.toFixed(1)}x
+                  </div>
+                </div>
+
+                <div
+                  class="flex gap-3 items-center w-full text-left p-3 bg-slate-700/50 rounded text-white"
+                >
+                  <div class="flex-1">
+                    <div class="font-medium text-sm">Gold Generation</div>
+                    <input
+                      type="range"
+                      min="0.1"
+                      max="5"
+                      step="0.1"
+                      .value=${this.goldGenerationModifier.toString()}
+                      @input=${this.onGoldGenerationModifierChange}
+                      class="w-full border border-slate-500 rounded-lg"
+                    />
+                  </div>
+                  <div class="text-sm text-slate-400 w-12 text-right">
+                    ${this.goldGenerationModifier.toFixed(1)}x
+                  </div>
+                </div>
+
+                <div
+                  class="flex gap-3 items-center w-full text-left p-3 bg-slate-700/50 rounded text-white"
+                >
+                  <div class="flex-1">
+                    <div class="font-medium text-sm">Game Speed</div>
+                    <input
+                      type="range"
+                      min="0.5"
+                      max="3"
+                      step="0.1"
+                      .value=${this.gameSpeedModifier.toString()}
+                      @input=${this.onGameSpeedModifierChange}
+                      class="w-full border border-slate-500 rounded-lg"
+                    />
+                  </div>
+                  <div class="text-sm text-slate-400 w-12 text-right">
+                    ${this.gameSpeedModifier.toFixed(1)}x
+                  </div>
+                </div>
+
+                <button
+                  class="w-full p-2 bg-slate-600 hover:bg-slate-500 rounded text-white text-sm transition-colors"
+                  @click="${this.resetBalanceModifiers}"
+                >
+                  Reset to Defaults
+                </button>
+              </div>
+            `
+          : ""}
+      </div>
+    `;
   }
 
   render() {
@@ -492,6 +728,8 @@ export class SettingsModal extends LitElement implements Layer {
                   : translateText("user_setting.off")}
               </div>
             </button>
+
+            ${this.isSingleplayer() ? this.renderBalanceSettings() : ""}
 
             <div class="border-t border-slate-600 pt-3 mt-4">
               <button

@@ -168,6 +168,7 @@ export function createRenderer(
   }
   settingsModal.userSettings = userSettings;
   settingsModal.eventBus = eventBus;
+  settingsModal.game = game;
 
   const unitDisplay = document.querySelector("unit-display") as UnitDisplay;
   if (!(unitDisplay instanceof UnitDisplay)) {

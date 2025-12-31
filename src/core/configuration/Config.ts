@@ -174,6 +174,8 @@ export interface Config {
   structureMinDist(): number;
   isReplay(): boolean;
   allianceExtensionPromptOffset(): number;
+  // Update game config values at runtime (for singleplayer balance adjustments)
+  updateGameConfig(updates: Partial<GameConfig>): void;
 }
 
 export interface Theme {
