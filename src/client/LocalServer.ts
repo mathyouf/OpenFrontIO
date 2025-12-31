@@ -61,8 +61,11 @@ export class LocalServer {
   start() {
     console.log("local server starting");
     this.turnCheckInterval = setInterval(() => {
+      // Apply game speed modifier (higher speed = lower interval)
+      const gameSpeedModifier =
+        this.lobbyConfig.gameStartInfo?.config?.gameSpeedModifier ?? 1;
       const turnIntervalMs =
-        this.lobbyConfig.serverConfig.turnIntervalMs() *
+        (this.lobbyConfig.serverConfig.turnIntervalMs() / gameSpeedModifier) *
         this.replaySpeedMultiplier;
 
       if (

@@ -52,6 +52,14 @@ export class SinglePlayerModal extends LitElement {
 
   @state() private disabledUnits: UnitType[] = [];
 
+  // Game mechanics modifiers
+  @state() private attackModifier: number = 1.0;
+  @state() private defenseModifier: number = 1.0;
+  @state() private troopGenerationModifier: number = 1.0;
+  @state() private goldGenerationModifier: number = 1.0;
+  @state() private gameSpeedModifier: number = 1.0;
+  @state() private showAdvancedSettings: boolean = false;
+
   private userSettings: UserSettings = new UserSettings();
 
   connectedCallback() {
@@ -404,6 +412,112 @@ export class SinglePlayerModal extends LitElement {
               })}
             </div>
           </div>
+
+          <!-- Game Balance Modifiers -->
+          <div class="options-section">
+            <div
+              class="option-title"
+              style="cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;"
+              @click=${() => (this.showAdvancedSettings = !this.showAdvancedSettings)}
+            >
+              <span style="transform: rotate(${this.showAdvancedSettings ? "90deg" : "0deg"}); transition: transform 0.2s;">▶</span>
+              Game Balance (Advanced)
+            </div>
+            ${this.showAdvancedSettings
+              ? html`
+                  <div class="option-cards" style="flex-direction: column; gap: 8px;">
+                    <div class="option-card" style="width: 100%; max-width: 400px;">
+                      <div style="display: flex; flex-direction: column; width: 100%; padding: 8px;">
+                        <label style="color: #ccc; margin-bottom: 4px;">Attack Damage: ${this.attackModifier.toFixed(1)}x</label>
+                        <input
+                          type="range"
+                          min="0.1"
+                          max="5"
+                          step="0.1"
+                          .value=${String(this.attackModifier)}
+                          @input=${(e: Event) => {
+                            this.attackModifier = parseFloat((e.target as HTMLInputElement).value);
+                          }}
+                          style="width: 100%;"
+                        />
+                      </div>
+                    </div>
+                    <div class="option-card" style="width: 100%; max-width: 400px;">
+                      <div style="display: flex; flex-direction: column; width: 100%; padding: 8px;">
+                        <label style="color: #ccc; margin-bottom: 4px;">Defense Bonus: ${this.defenseModifier.toFixed(1)}x</label>
+                        <input
+                          type="range"
+                          min="0.1"
+                          max="5"
+                          step="0.1"
+                          .value=${String(this.defenseModifier)}
+                          @input=${(e: Event) => {
+                            this.defenseModifier = parseFloat((e.target as HTMLInputElement).value);
+                          }}
+                          style="width: 100%;"
+                        />
+                      </div>
+                    </div>
+                    <div class="option-card" style="width: 100%; max-width: 400px;">
+                      <div style="display: flex; flex-direction: column; width: 100%; padding: 8px;">
+                        <label style="color: #ccc; margin-bottom: 4px;">Troop Generation: ${this.troopGenerationModifier.toFixed(1)}x</label>
+                        <input
+                          type="range"
+                          min="0.1"
+                          max="5"
+                          step="0.1"
+                          .value=${String(this.troopGenerationModifier)}
+                          @input=${(e: Event) => {
+                            this.troopGenerationModifier = parseFloat((e.target as HTMLInputElement).value);
+                          }}
+                          style="width: 100%;"
+                        />
+                      </div>
+                    </div>
+                    <div class="option-card" style="width: 100%; max-width: 400px;">
+                      <div style="display: flex; flex-direction: column; width: 100%; padding: 8px;">
+                        <label style="color: #ccc; margin-bottom: 4px;">Gold Generation: ${this.goldGenerationModifier.toFixed(1)}x</label>
+                        <input
+                          type="range"
+                          min="0.1"
+                          max="5"
+                          step="0.1"
+                          .value=${String(this.goldGenerationModifier)}
+                          @input=${(e: Event) => {
+                            this.goldGenerationModifier = parseFloat((e.target as HTMLInputElement).value);
+                          }}
+                          style="width: 100%;"
+                        />
+                      </div>
+                    </div>
+                    <div class="option-card" style="width: 100%; max-width: 400px;">
+                      <div style="display: flex; flex-direction: column; width: 100%; padding: 8px;">
+                        <label style="color: #ccc; margin-bottom: 4px;">Game Speed: ${this.gameSpeedModifier.toFixed(1)}x</label>
+                        <input
+                          type="range"
+                          min="0.5"
+                          max="3"
+                          step="0.1"
+                          .value=${String(this.gameSpeedModifier)}
+                          @input=${(e: Event) => {
+                            this.gameSpeedModifier = parseFloat((e.target as HTMLInputElement).value);
+                          }}
+                          style="width: 100%;"
+                        />
+                      </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 8px;">
+                      <button
+                        @click=${this.resetModifiers}
+                        style="padding: 8px 16px; background: #444; color: #ccc; border: none; border-radius: 4px; cursor: pointer;"
+                      >
+                        Reset to Defaults
+                      </button>
+                    </div>
+                  </div>
+                `
+              : ""}
+          </div>
         </div>
 
         <o-button
@@ -513,6 +627,14 @@ export class SinglePlayerModal extends LitElement {
       : this.disabledUnits.filter((u) => u !== unit);
   }
 
+  private resetModifiers(): void {
+    this.attackModifier = 1.0;
+    this.defenseModifier = 1.0;
+    this.troopGenerationModifier = 1.0;
+    this.goldGenerationModifier = 1.0;
+    this.gameSpeedModifier = 1.0;
+  }
+
   private async startGame() {
     // If random map is selected, choose a random map now
     if (this.useRandomMap) {
@@ -593,6 +715,12 @@ export class SinglePlayerModal extends LitElement {
                 : {
                     disableNations: this.disableNations,
                   }),
+              // Game balance modifiers (only include if not default)
+              ...(this.attackModifier !== 1.0 && { attackModifier: this.attackModifier }),
+              ...(this.defenseModifier !== 1.0 && { defenseModifier: this.defenseModifier }),
+              ...(this.troopGenerationModifier !== 1.0 && { troopGenerationModifier: this.troopGenerationModifier }),
+              ...(this.goldGenerationModifier !== 1.0 && { goldGenerationModifier: this.goldGenerationModifier }),
+              ...(this.gameSpeedModifier !== 1.0 && { gameSpeedModifier: this.gameSpeedModifier }),
             },
             lobbyCreatedAt: Date.now(), // ms; server should be authoritative in MP
           },

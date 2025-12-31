@@ -285,7 +285,9 @@ export class DefaultConfig implements Config {
   }
 
   defensePostDefenseBonus(): number {
-    return 5;
+    const baseBonus = 5;
+    const modifier = this._gameConfig.defenseModifier ?? 1;
+    return baseBonus * modifier;
   }
 
   defensePostSpeedBonus(): number {
@@ -647,6 +649,10 @@ export class DefaultConfig implements Config {
       default:
         throw new Error(`terrain type ${type} not supported`);
     }
+
+    // Apply attack modifier from game config
+    const attackModifier = this._gameConfig.attackModifier ?? 1;
+    mag *= attackModifier;
     if (defender.isPlayer()) {
       for (const dp of gm.nearbyUnits(
         tileToConquer,
@@ -867,14 +873,24 @@ export class DefaultConfig implements Config {
       }
     }
 
+    // Apply troop generation modifier from game config
+    const troopModifier = this._gameConfig.troopGenerationModifier ?? 1;
+    toAdd *= troopModifier;
+
     return Math.min(player.troops() + toAdd, max) - player.troops();
   }
 
   goldAdditionRate(player: Player): Gold {
+    let baseGold: bigint;
     if (player.type() === PlayerType.Bot) {
-      return 50n;
+      baseGold = 50n;
+    } else {
+      baseGold = 100n;
     }
-    return 100n;
+
+    // Apply gold generation modifier from game config
+    const goldModifier = this._gameConfig.goldGenerationModifier ?? 1;
+    return BigInt(Math.floor(Number(baseGold) * goldModifier));
   }
 
   nukeMagnitudes(unitType: UnitType): NukeMagnitude {

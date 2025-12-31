@@ -177,6 +177,12 @@ export const GameConfigSchema = z.object({
   maxTimerValue: z.number().int().min(1).max(120).optional(),
   disabledUnits: z.enum(UnitType).array().optional(),
   playerTeams: TeamCountConfigSchema.optional(),
+  // Game mechanics modifiers (singleplayer only)
+  attackModifier: z.number().min(0.1).max(5).optional(),
+  defenseModifier: z.number().min(0.1).max(5).optional(),
+  troopGenerationModifier: z.number().min(0.1).max(5).optional(),
+  goldGenerationModifier: z.number().min(0.1).max(5).optional(),
+  gameSpeedModifier: z.number().min(0.5).max(3).optional(),
 });
 
 export const TeamSchema = z.string();
