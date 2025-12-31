@@ -93,7 +93,9 @@ export class BalancePanel extends LitElement implements Layer {
     if (!this.game) {
       return false;
     }
-    return this.game.config().gameConfig().gameType === GameType.Singleplayer;
+    // Show for singleplayer or when gameType is not set (assume local game)
+    const gameType = this.game.config().gameConfig().gameType;
+    return gameType === GameType.Singleplayer || gameType === undefined;
   }
 
   createRenderRoot() {
