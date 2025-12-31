@@ -9,7 +9,7 @@ export class BalancePanel extends LitElement implements Layer {
   public game: GameView;
 
   @state()
-  private isCollapsed: boolean = true;
+  private isCollapsed: boolean = false; // Start expanded so it's visible
 
   @state()
   private expandedSections: Set<string> = new Set(["combat"]);
@@ -90,9 +90,15 @@ export class BalancePanel extends LitElement implements Layer {
   }
 
   private isSingleplayer(): boolean {
-    if (!this.game) return false;
+    // Always show for now to debug visibility
+    if (!this.game) {
+      console.log("BalancePanel: game is not set");
+      return true; // Show anyway for debugging
+    }
     const gameType = this.game.config().gameConfig().gameType;
-    return gameType === GameType.Singleplayer;
+    const isSP = gameType === GameType.Singleplayer;
+    console.log("BalancePanel: gameType =", gameType, "isSingleplayer =", isSP);
+    return true; // Always show for debugging
   }
 
   createRenderRoot() {
