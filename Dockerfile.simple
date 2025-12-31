@@ -30,12 +30,13 @@ RUN npm run build-prod
 FROM base AS production
 ENV NODE_ENV=production
 ENV HUSKY=0
+ENV NPM_CONFIG_IGNORE_SCRIPTS=1
 
 # Copy package files
 COPY package*.json ./
 
-# Install production dependencies only
-RUN npm ci --omit=dev
+# Install production dependencies only (skip all lifecycle scripts)
+RUN npm ci --omit=dev --ignore-scripts
 
 # Copy built static files
 COPY --from=build /app/static ./static
