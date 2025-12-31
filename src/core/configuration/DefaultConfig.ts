@@ -382,7 +382,9 @@ export class DefaultConfig implements Config {
         this.tradeShipPortMultiplier(numPlayerPorts),
     );
 
-    return Math.floor(25 / combined);
+    // Apply trade ship spawn modifier (higher = more ships, lower spawn rate number)
+    const modifier = this._gameConfig.tradeShipSpawnModifier ?? 1;
+    return Math.floor(25 / (combined * modifier));
   }
 
   private tradeShipBaseSpawn(
@@ -554,7 +556,24 @@ export class DefaultConfig implements Config {
           Math.min(player.unitsOwned(type), player.unitsConstructed(type)),
         0,
       );
-      return BigInt(costFn(numUnits));
+      let baseCost = costFn(numUnits);
+
+      // Apply appropriate cost modifier based on unit type
+      const isNuke = types.some(
+        (t) =>
+          t === UnitType.AtomBomb ||
+          t === UnitType.HydrogenBomb ||
+          t === UnitType.MissileSilo,
+      );
+      if (isNuke) {
+        const nukeMod = this._gameConfig.nukeCostModifier ?? 1;
+        baseCost = Math.floor(baseCost * nukeMod);
+      } else {
+        const buildMod = this._gameConfig.buildCostModifier ?? 1;
+        baseCost = Math.floor(baseCost * buildMod);
+      }
+
+      return BigInt(baseCost);
     };
   }
 
@@ -609,7 +628,9 @@ export class DefaultConfig implements Config {
     return 80;
   }
   boatMaxNumber(): number {
-    return 3;
+    const base = 3;
+    const modifier = this._gameConfig.boatCapacityModifier ?? 1;
+    return Math.floor(base * modifier);
   }
   numSpawnPhaseTurns(): number {
     return this._gameConfig.gameType === GameType.Singleplayer ? 100 : 300;
@@ -797,18 +818,25 @@ export class DefaultConfig implements Config {
       return 10_000;
     }
     if (playerInfo.playerType === PlayerType.Nation) {
+      const nationMod = this._gameConfig.nationStrengthModifier ?? 1;
+      let baseTroops: number;
       switch (this._gameConfig.difficulty) {
         case Difficulty.Easy:
-          return 18_750;
+          baseTroops = 18_750;
+          break;
         case Difficulty.Medium:
-          return 25_000; // Like humans
+          baseTroops = 25_000; // Like humans
+          break;
         case Difficulty.Hard:
-          return 31_250;
+          baseTroops = 31_250;
+          break;
         case Difficulty.Impossible:
-          return 37_500;
+          baseTroops = 37_500;
+          break;
         default:
           assertNever(this._gameConfig.difficulty);
       }
+      return Math.floor(baseTroops * nationMod);
     }
     return this.infiniteTroops() ? 1_000_000 : 25_000;
   }

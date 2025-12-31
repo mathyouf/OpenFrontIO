@@ -183,6 +183,16 @@ export const GameConfigSchema = z.object({
   troopGenerationModifier: z.number().min(0.1).max(5).optional(),
   goldGenerationModifier: z.number().min(0.1).max(5).optional(),
   gameSpeedModifier: z.number().min(0.5).max(3).optional(),
+  // Cost modifiers
+  buildCostModifier: z.number().min(0.1).max(5).optional(),
+  nukeCostModifier: z.number().min(0.1).max(5).optional(),
+  // AI behavior modifiers
+  botAggressionModifier: z.number().min(0.1).max(3).optional(),
+  nationStrengthModifier: z.number().min(0.1).max(3).optional(),
+  // Naval modifiers
+  tradeShipSpawnModifier: z.number().min(0.1).max(5).optional(),
+  warshipSpawnModifier: z.number().min(0.1).max(5).optional(),
+  boatCapacityModifier: z.number().min(0.5).max(5).optional(),
 });
 
 export const TeamSchema = z.string();

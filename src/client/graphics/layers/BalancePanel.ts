@@ -12,30 +12,48 @@ export class BalancePanel extends LitElement implements Layer {
   private isCollapsed: boolean = true;
 
   @state()
-  private attackModifier: number = 1.0;
+  private expandedSections: Set<string> = new Set(["combat"]);
 
-  @state()
-  private defenseModifier: number = 1.0;
+  // Combat modifiers
+  @state() private attackModifier: number = 1.0;
+  @state() private defenseModifier: number = 1.0;
+  @state() private troopGenerationModifier: number = 1.0;
+  @state() private goldGenerationModifier: number = 1.0;
+  @state() private gameSpeedModifier: number = 1.0;
 
-  @state()
-  private troopGenerationModifier: number = 1.0;
+  // Cost modifiers
+  @state() private buildCostModifier: number = 1.0;
+  @state() private nukeCostModifier: number = 1.0;
 
-  @state()
-  private goldGenerationModifier: number = 1.0;
+  // AI modifiers
+  @state() private botAggressionModifier: number = 1.0;
+  @state() private nationStrengthModifier: number = 1.0;
 
-  @state()
-  private gameSpeedModifier: number = 1.0;
+  // Naval modifiers
+  @state() private tradeShipSpawnModifier: number = 1.0;
+  @state() private warshipSpawnModifier: number = 1.0;
+  @state() private boatCapacityModifier: number = 1.0;
 
   init() {
-    // Load initial values from game config
     if (this.game && this.isSingleplayer()) {
-      const config = this.game.config().gameConfig();
-      this.attackModifier = config.attackModifier ?? 1.0;
-      this.defenseModifier = config.defenseModifier ?? 1.0;
-      this.troopGenerationModifier = config.troopGenerationModifier ?? 1.0;
-      this.goldGenerationModifier = config.goldGenerationModifier ?? 1.0;
-      this.gameSpeedModifier = config.gameSpeedModifier ?? 1.0;
+      this.loadFromConfig();
     }
+  }
+
+  private loadFromConfig() {
+    const config = this.game.config().gameConfig();
+    this.attackModifier = config.attackModifier ?? 1.0;
+    this.defenseModifier = config.defenseModifier ?? 1.0;
+    this.troopGenerationModifier = config.troopGenerationModifier ?? 1.0;
+    this.goldGenerationModifier = config.goldGenerationModifier ?? 1.0;
+    this.gameSpeedModifier = config.gameSpeedModifier ?? 1.0;
+    this.buildCostModifier = config.buildCostModifier ?? 1.0;
+    this.nukeCostModifier = config.nukeCostModifier ?? 1.0;
+    this.botAggressionModifier = config.botAggressionModifier ?? 1.0;
+    this.nationStrengthModifier = config.nationStrengthModifier ?? 1.0;
+    this.tradeShipSpawnModifier = config.tradeShipSpawnModifier ?? 1.0;
+    this.warshipSpawnModifier = config.warshipSpawnModifier ?? 1.0;
+    this.boatCapacityModifier = config.boatCapacityModifier ?? 1.0;
   }
 
   private isSingleplayer(): boolean {
@@ -55,43 +73,17 @@ export class BalancePanel extends LitElement implements Layer {
     this.requestUpdate();
   }
 
-  private onAttackModifierChange(event: Event) {
-    this.attackModifier = parseFloat((event.target as HTMLInputElement).value);
-    this.applyBalanceModifiers();
+  private toggleSection(section: string) {
+    if (this.expandedSections.has(section)) {
+      this.expandedSections.delete(section);
+    } else {
+      this.expandedSections.add(section);
+    }
+    this.expandedSections = new Set(this.expandedSections);
     this.requestUpdate();
   }
 
-  private onDefenseModifierChange(event: Event) {
-    this.defenseModifier = parseFloat((event.target as HTMLInputElement).value);
-    this.applyBalanceModifiers();
-    this.requestUpdate();
-  }
-
-  private onTroopGenerationModifierChange(event: Event) {
-    this.troopGenerationModifier = parseFloat(
-      (event.target as HTMLInputElement).value,
-    );
-    this.applyBalanceModifiers();
-    this.requestUpdate();
-  }
-
-  private onGoldGenerationModifierChange(event: Event) {
-    this.goldGenerationModifier = parseFloat(
-      (event.target as HTMLInputElement).value,
-    );
-    this.applyBalanceModifiers();
-    this.requestUpdate();
-  }
-
-  private onGameSpeedModifierChange(event: Event) {
-    this.gameSpeedModifier = parseFloat(
-      (event.target as HTMLInputElement).value,
-    );
-    this.applyBalanceModifiers();
-    this.requestUpdate();
-  }
-
-  private applyBalanceModifiers() {
+  private applyAllModifiers() {
     if (!this.game) return;
     this.game.config().updateGameConfig({
       attackModifier: this.attackModifier,
@@ -99,21 +91,90 @@ export class BalancePanel extends LitElement implements Layer {
       troopGenerationModifier: this.troopGenerationModifier,
       goldGenerationModifier: this.goldGenerationModifier,
       gameSpeedModifier: this.gameSpeedModifier,
+      buildCostModifier: this.buildCostModifier,
+      nukeCostModifier: this.nukeCostModifier,
+      botAggressionModifier: this.botAggressionModifier,
+      nationStrengthModifier: this.nationStrengthModifier,
+      tradeShipSpawnModifier: this.tradeShipSpawnModifier,
+      warshipSpawnModifier: this.warshipSpawnModifier,
+      boatCapacityModifier: this.boatCapacityModifier,
     });
   }
 
-  private resetBalanceModifiers() {
+  private resetAll() {
     this.attackModifier = 1.0;
     this.defenseModifier = 1.0;
     this.troopGenerationModifier = 1.0;
     this.goldGenerationModifier = 1.0;
     this.gameSpeedModifier = 1.0;
-    this.applyBalanceModifiers();
+    this.buildCostModifier = 1.0;
+    this.nukeCostModifier = 1.0;
+    this.botAggressionModifier = 1.0;
+    this.nationStrengthModifier = 1.0;
+    this.tradeShipSpawnModifier = 1.0;
+    this.warshipSpawnModifier = 1.0;
+    this.boatCapacityModifier = 1.0;
+    this.applyAllModifiers();
     this.requestUpdate();
   }
 
+  private onSliderChange(field: string, event: Event) {
+    const value = parseFloat((event.target as HTMLInputElement).value);
+    (this as Record<string, number>)[field] = value;
+    this.applyAllModifiers();
+    this.requestUpdate();
+  }
+
+  private renderSlider(
+    label: string,
+    field: string,
+    min: number,
+    max: number,
+    step: number = 0.1,
+  ) {
+    const value = (this as Record<string, number>)[field];
+    return html`
+      <div class="flex items-center gap-2 py-1">
+        <div class="text-xs text-slate-300 w-20 truncate" title="${label}">
+          ${label}
+        </div>
+        <input
+          type="range"
+          min="${min}"
+          max="${max}"
+          step="${step}"
+          .value=${value.toString()}
+          @input=${(e: Event) => this.onSliderChange(field, e)}
+          class="flex-1 h-1.5 bg-slate-600 rounded-lg appearance-none cursor-pointer"
+        />
+        <div class="text-xs text-slate-400 w-10 text-right">
+          ${value.toFixed(1)}x
+        </div>
+      </div>
+    `;
+  }
+
+  private renderSection(
+    id: string,
+    title: string,
+    sliders: ReturnType<typeof html>[],
+  ) {
+    const isExpanded = this.expandedSections.has(id);
+    return html`
+      <div class="border-b border-slate-700 last:border-0">
+        <button
+          class="w-full flex items-center justify-between p-2 hover:bg-slate-700/50 text-xs font-medium text-slate-300"
+          @click=${() => this.toggleSection(id)}
+        >
+          <span>${title}</span>
+          <span class="text-slate-500">${isExpanded ? "▼" : "▶"}</span>
+        </button>
+        ${isExpanded ? html`<div class="px-2 pb-2">${sliders}</div>` : ""}
+      </div>
+    `;
+  }
+
   render() {
-    // Only show for singleplayer games
     if (!this.isSingleplayer()) {
       return null;
     }
@@ -137,102 +198,55 @@ export class BalancePanel extends LitElement implements Layer {
     return html`
       <div
         class="fixed bottom-4 left-4 z-[1000] bg-slate-800/95 border border-slate-600 rounded-lg shadow-xl"
-        style="width: 280px;"
+        style="width: 300px; max-height: 70vh; display: flex; flex-direction: column;"
       >
         <div
-          class="p-2 px-3 border-b border-slate-600 cursor-pointer hover:bg-slate-700/50 flex items-center justify-between"
+          class="p-2 px-3 border-b border-slate-600 cursor-pointer hover:bg-slate-700/50 flex items-center justify-between flex-shrink-0"
           @click="${this.toggleCollapsed}"
         >
           <span class="text-white text-sm font-medium">Game Balance</span>
           <span class="text-slate-400">▼</span>
         </div>
 
-        <div class="p-3 space-y-2">
-          <div class="flex items-center gap-2">
-            <div class="text-xs text-slate-300 w-16">Attack</div>
-            <input
-              type="range"
-              min="0.1"
-              max="5"
-              step="0.1"
-              .value=${this.attackModifier.toString()}
-              @input=${this.onAttackModifierChange}
-              class="flex-1 h-2 bg-slate-600 rounded-lg appearance-none cursor-pointer"
-            />
-            <div class="text-xs text-slate-400 w-10 text-right">
-              ${this.attackModifier.toFixed(1)}x
-            </div>
-          </div>
+        <div class="overflow-y-auto flex-1">
+          ${this.renderSection("combat", "Combat & Economy", [
+            this.renderSlider("Attack", "attackModifier", 0.1, 5),
+            this.renderSlider("Defense", "defenseModifier", 0.1, 5),
+            this.renderSlider("Troops", "troopGenerationModifier", 0.1, 5),
+            this.renderSlider("Gold", "goldGenerationModifier", 0.1, 5),
+            this.renderSlider("Speed", "gameSpeedModifier", 0.5, 3),
+          ])}
+          ${this.renderSection("costs", "Costs", [
+            this.renderSlider("Build Cost", "buildCostModifier", 0.1, 5),
+            this.renderSlider("Nuke Cost", "nukeCostModifier", 0.1, 5),
+          ])}
+          ${this.renderSection("ai", "AI Behavior", [
+            this.renderSlider(
+              "Bot Aggression",
+              "botAggressionModifier",
+              0.1,
+              3,
+            ),
+            this.renderSlider(
+              "Nation Strength",
+              "nationStrengthModifier",
+              0.1,
+              3,
+            ),
+          ])}
+          ${this.renderSection("naval", "Naval", [
+            this.renderSlider("Trade Ships", "tradeShipSpawnModifier", 0.1, 5),
+            this.renderSlider("Warships", "warshipSpawnModifier", 0.1, 5),
+            this.renderSlider("Boat Capacity", "boatCapacityModifier", 0.5, 5),
+          ])}
+        </div>
 
-          <div class="flex items-center gap-2">
-            <div class="text-xs text-slate-300 w-16">Defense</div>
-            <input
-              type="range"
-              min="0.1"
-              max="5"
-              step="0.1"
-              .value=${this.defenseModifier.toString()}
-              @input=${this.onDefenseModifierChange}
-              class="flex-1 h-2 bg-slate-600 rounded-lg appearance-none cursor-pointer"
-            />
-            <div class="text-xs text-slate-400 w-10 text-right">
-              ${this.defenseModifier.toFixed(1)}x
-            </div>
-          </div>
-
-          <div class="flex items-center gap-2">
-            <div class="text-xs text-slate-300 w-16">Troops</div>
-            <input
-              type="range"
-              min="0.1"
-              max="5"
-              step="0.1"
-              .value=${this.troopGenerationModifier.toString()}
-              @input=${this.onTroopGenerationModifierChange}
-              class="flex-1 h-2 bg-slate-600 rounded-lg appearance-none cursor-pointer"
-            />
-            <div class="text-xs text-slate-400 w-10 text-right">
-              ${this.troopGenerationModifier.toFixed(1)}x
-            </div>
-          </div>
-
-          <div class="flex items-center gap-2">
-            <div class="text-xs text-slate-300 w-16">Gold</div>
-            <input
-              type="range"
-              min="0.1"
-              max="5"
-              step="0.1"
-              .value=${this.goldGenerationModifier.toString()}
-              @input=${this.onGoldGenerationModifierChange}
-              class="flex-1 h-2 bg-slate-600 rounded-lg appearance-none cursor-pointer"
-            />
-            <div class="text-xs text-slate-400 w-10 text-right">
-              ${this.goldGenerationModifier.toFixed(1)}x
-            </div>
-          </div>
-
-          <div class="flex items-center gap-2">
-            <div class="text-xs text-slate-300 w-16">Speed</div>
-            <input
-              type="range"
-              min="0.5"
-              max="3"
-              step="0.1"
-              .value=${this.gameSpeedModifier.toString()}
-              @input=${this.onGameSpeedModifierChange}
-              class="flex-1 h-2 bg-slate-600 rounded-lg appearance-none cursor-pointer"
-            />
-            <div class="text-xs text-slate-400 w-10 text-right">
-              ${this.gameSpeedModifier.toFixed(1)}x
-            </div>
-          </div>
-
+        <div class="p-2 border-t border-slate-600 flex-shrink-0">
           <button
-            class="w-full mt-2 p-1.5 bg-slate-600 hover:bg-slate-500 rounded text-white text-xs transition-colors"
-            @click="${this.resetBalanceModifiers}"
+            class="w-full p-1.5 bg-slate-600 hover:bg-slate-500 rounded text-white text-xs transition-colors"
+            @click="${this.resetAll}"
           >
-            Reset
+            Reset All
           </button>
         </div>
       </div>
