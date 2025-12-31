@@ -1,0 +1,116 @@
+{
+  "map": {
+    "height": 1200,
+    "num_land_tiles": 710352,
+    "width": 1600
+  },
+  "map16x": {
+    "height": 300,
+    "num_land_tiles": 43128,
+    "width": 400
+  },
+  "map4x": {
+    "height": 600,
+    "num_land_tiles": 175866,
+    "width": 800
+  },
+  "name": "RationalistRealm",
+  "nations": [
+    {
+      "coordinates": [
+        400,
+        300
+      ],
+      "flag": "lesswrong",
+      "name": "LessWrong Collective"
+    },
+    {
+      "coordinates": [
+        600,
+        350
+      ],
+      "flag": "miri",
+      "name": "MIRI"
+    },
+    {
+      "coordinates": [
+        800,
+        400
+      ],
+      "flag": "anthropic",
+      "name": "Anthropic"
+    },
+    {
+      "coordinates": [
+        300,
+        500
+      ],
+      "flag": "openai",
+      "name": "OpenAI"
+    },
+    {
+      "coordinates": [
+        500,
+        550
+      ],
+      "flag": "deepmind",
+      "name": "DeepMind"
+    },
+    {
+      "coordinates": [
+        700,
+        500
+      ],
+      "flag": "acx",
+      "name": "Astral Codex Ten"
+    },
+    {
+      "coordinates": [
+        200,
+        700
+      ],
+      "flag": "ea",
+      "name": "Effective Altruism"
+    },
+    {
+      "coordinates": [
+        450,
+        750
+      ],
+      "flag": "80k",
+      "name": "80,000 Hours"
+    },
+    {
+      "coordinates": [
+        650,
+        700
+      ],
+      "flag": "givewell",
+      "name": "GiveWell"
+    },
+    {
+      "coordinates": [
+        850,
+        650
+      ],
+      "flag": "chai",
+      "name": "Center for Human-Compatible AI"
+    },
+    {
+      "coordinates": [
+        350,
+        200
+      ],
+      "flag": "fhi",
+      "name": "Future of Humanity Institute"
+    },
+    {
+      "coordinates": [
+        550,
+        200
+      ],
+      "flag": "gpi",
+      "name": "Global Priorities Institute"
+    }
+  ]
+}

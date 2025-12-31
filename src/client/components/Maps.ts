@@ -45,6 +45,7 @@ export const MapDescription: Record<keyof typeof GameMapType, string> = {
   Manicouagan: "Manicouagan",
   Lemnos: "Lemnos",
   Rationalistsphere: "Rationalistsphere",
+  RationalistRealm: "Rationalist Realm",
 };
 
 @customElement("map-display")

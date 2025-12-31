@@ -108,6 +108,7 @@ export enum GameMapType {
   Manicouagan = "Manicouagan",
   Lemnos = "Lemnos",
   Rationalistsphere = "Rationalistsphere",
+  RationalistRealm = "Rationalist Realm",
 }
 
 export type GameMapName = keyof typeof GameMapType;
@@ -157,6 +158,7 @@ export const mapCategories: Record<string, GameMapType[]> = {
     GameMapType.FourIslands,
     GameMapType.Svalmel,
     GameMapType.Rationalistsphere,
+    GameMapType.RationalistRealm,
   ],
 };
 

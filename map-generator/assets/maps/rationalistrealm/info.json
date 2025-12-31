@@ -1,0 +1,65 @@
+{
+  "name": "RationalistRealm",
+  "nations": [
+    {
+      "coordinates": [400, 300],
+      "name": "LessWrong Collective",
+      "flag": "lesswrong"
+    },
+    {
+      "coordinates": [600, 350],
+      "name": "MIRI",
+      "flag": "miri"
+    },
+    {
+      "coordinates": [800, 400],
+      "name": "Anthropic",
+      "flag": "anthropic"
+    },
+    {
+      "coordinates": [300, 500],
+      "name": "OpenAI",
+      "flag": "openai"
+    },
+    {
+      "coordinates": [500, 550],
+      "name": "DeepMind",
+      "flag": "deepmind"
+    },
+    {
+      "coordinates": [700, 500],
+      "name": "Astral Codex Ten",
+      "flag": "acx"
+    },
+    {
+      "coordinates": [200, 700],
+      "name": "Effective Altruism",
+      "flag": "ea"
+    },
+    {
+      "coordinates": [450, 750],
+      "name": "80,000 Hours",
+      "flag": "80k"
+    },
+    {
+      "coordinates": [650, 700],
+      "name": "GiveWell",
+      "flag": "givewell"
+    },
+    {
+      "coordinates": [850, 650],
+      "name": "Center for Human-Compatible AI",
+      "flag": "chai"
+    },
+    {
+      "coordinates": [350, 200],
+      "name": "Future of Humanity Institute",
+      "flag": "fhi"
+    },
+    {
+      "coordinates": [550, 200],
+      "name": "Global Priorities Institute",
+      "flag": "gpi"
+    }
+  ]
+}
