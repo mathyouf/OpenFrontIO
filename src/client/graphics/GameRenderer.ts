@@ -8,6 +8,7 @@ import { TransformHandler } from "./TransformHandler";
 import { UIState } from "./UIState";
 import { AdTimer } from "./layers/AdTimer";
 import { AlertFrame } from "./layers/AlertFrame";
+import { BalancePanel } from "./layers/BalancePanel";
 import { BuildMenu } from "./layers/BuildMenu";
 import { ChatDisplay } from "./layers/ChatDisplay";
 import { ChatModal } from "./layers/ChatModal";
@@ -170,6 +171,12 @@ export function createRenderer(
   settingsModal.eventBus = eventBus;
   settingsModal.game = game;
 
+  const balancePanel = document.querySelector("balance-panel") as BalancePanel;
+  if (!(balancePanel instanceof BalancePanel)) {
+    console.error("balance panel not found");
+  }
+  balancePanel.game = game;
+
   const unitDisplay = document.querySelector("unit-display") as UnitDisplay;
   if (!(unitDisplay instanceof UnitDisplay)) {
     console.error("unit display not found");
@@ -272,6 +279,7 @@ export function createRenderer(
     winModal,
     replayPanel,
     settingsModal,
+    balancePanel,
     teamStats,
     playerPanel,
     headsUpMessage,
