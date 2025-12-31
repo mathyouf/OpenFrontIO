@@ -23,7 +23,11 @@ COPY resources ./resources
 COPY src ./src
 
 # Create empty proprietary directory if it doesn't exist
-RUN mkdir -p proprietary
+# Generate placeholder silent MP3 files for proprietary sounds (not in public repo)
+RUN mkdir -p proprietary/sounds/music && \
+    echo "//uQxAAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV" | base64 -d > proprietary/sounds/music/of4.mp3 && \
+    cp proprietary/sounds/music/of4.mp3 proprietary/sounds/music/openfront.mp3 && \
+    cp proprietary/sounds/music/of4.mp3 proprietary/sounds/music/war.mp3
 
 ARG GIT_COMMIT=unknown
 ENV GIT_COMMIT="$GIT_COMMIT"
