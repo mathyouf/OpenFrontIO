@@ -90,15 +90,10 @@ export class BalancePanel extends LitElement implements Layer {
   }
 
   private isSingleplayer(): boolean {
-    // Always show for now to debug visibility
     if (!this.game) {
-      console.log("BalancePanel: game is not set");
-      return true; // Show anyway for debugging
+      return false;
     }
-    const gameType = this.game.config().gameConfig().gameType;
-    const isSP = gameType === GameType.Singleplayer;
-    console.log("BalancePanel: gameType =", gameType, "isSingleplayer =", isSP);
-    return true; // Always show for debugging
+    return this.game.config().gameConfig().gameType === GameType.Singleplayer;
   }
 
   createRenderRoot() {
@@ -124,7 +119,7 @@ export class BalancePanel extends LitElement implements Layer {
 
   private applyAllModifiers() {
     if (!this.game) return;
-    this.game.config().updateGameConfig({
+    const updates = {
       // Combat
       attackModifier: this.attackModifier,
       defenseModifier: this.defenseModifier,
@@ -154,7 +149,11 @@ export class BalancePanel extends LitElement implements Layer {
       // Gameplay
       spawnImmunityModifier: this.spawnImmunityModifier,
       allianceDurationModifier: this.allianceDurationModifier,
-    });
+    };
+    // Update local config for display
+    this.game.config().updateGameConfig(updates);
+    // Send updates to the worker where game simulation runs
+    this.game.worker.updateGameConfig(updates);
   }
 
   private resetAll() {

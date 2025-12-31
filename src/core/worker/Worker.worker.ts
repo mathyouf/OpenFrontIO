@@ -170,6 +170,18 @@ ctx.addEventListener("message", async (e: MessageEvent<MainThreadMessage>) => {
         console.error("Failed to spawn transport ship:", error);
       }
       break;
+    case "update_game_config":
+      if (!gameRunner) {
+        throw new Error("Game runner not initialized");
+      }
+
+      try {
+        const gr = await gameRunner;
+        gr.game.config().updateGameConfig(message.updates);
+      } catch (error) {
+        console.error("Failed to update game config:", error);
+      }
+      break;
     default:
       console.warn("Unknown message :", message);
   }

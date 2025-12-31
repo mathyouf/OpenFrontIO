@@ -6,7 +6,7 @@ import {
 } from "../game/Game";
 import { TileRef } from "../game/GameMap";
 import { GameUpdateViewData } from "../game/GameUpdates";
-import { ClientID, GameStartInfo, Turn } from "../Schemas";
+import { ClientID, GameConfig, GameStartInfo, Turn } from "../Schemas";
 
 export type WorkerMessageType =
   | "heartbeat"
@@ -23,7 +23,8 @@ export type WorkerMessageType =
   | "attack_average_position"
   | "attack_average_position_result"
   | "transport_ship_spawn"
-  | "transport_ship_spawn_result";
+  | "transport_ship_spawn_result"
+  | "update_game_config";
 
 // Base interface for all messages
 interface BaseWorkerMessage {
@@ -112,6 +113,11 @@ export interface TransportShipSpawnResultMessage extends BaseWorkerMessage {
   result: TileRef | false;
 }
 
+export interface UpdateGameConfigMessage extends BaseWorkerMessage {
+  type: "update_game_config";
+  updates: Partial<GameConfig>;
+}
+
 // Union types for type safety
 export type MainThreadMessage =
   | HeartbeatMessage
@@ -121,7 +127,8 @@ export type MainThreadMessage =
   | PlayerProfileMessage
   | PlayerBorderTilesMessage
   | AttackAveragePositionMessage
-  | TransportShipSpawnMessage;
+  | TransportShipSpawnMessage
+  | UpdateGameConfigMessage;
 
 // Message send from worker
 export type WorkerMessage =

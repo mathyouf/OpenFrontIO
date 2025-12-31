@@ -7,7 +7,7 @@ import {
 } from "../game/Game";
 import { TileRef } from "../game/GameMap";
 import { ErrorUpdate, GameUpdateViewData } from "../game/GameUpdates";
-import { ClientID, GameStartInfo, Turn } from "../Schemas";
+import { ClientID, GameConfig, GameStartInfo, Turn } from "../Schemas";
 import { generateID } from "../Util";
 import { WorkerMessage } from "./WorkerMessages";
 
@@ -254,6 +254,18 @@ export class WorkerClient {
         playerID: playerID,
         targetTile: targetTile,
       });
+    });
+  }
+
+  updateGameConfig(updates: Partial<GameConfig>): void {
+    if (!this.isInitialized) {
+      console.warn("Worker not initialized, cannot update game config");
+      return;
+    }
+
+    this.worker.postMessage({
+      type: "update_game_config",
+      updates: updates,
     });
   }
 
