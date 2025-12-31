@@ -146,6 +146,65 @@ export async function startMaster() {
   server.listen(PORT, () => {
     log.info(`Master HTTP server listening on port ${PORT}`);
   });
+
+  // Handle WebSocket upgrade requests for worker routes
+  // This proxies WebSocket connections to the appropriate worker
+  server.on("upgrade", (req, socket, head) => {
+    const url = req.url || "";
+    const match = url.match(/^\/w(\d+)(\/.*)?$/);
+
+    if (!match) {
+      // Not a worker route, close the connection
+      socket.destroy();
+      return;
+    }
+
+    const workerId = parseInt(match[1]);
+    const workerPort = 3001 + workerId;
+
+    log.debug(`Proxying WebSocket upgrade for ${url} to worker ${workerId} on port ${workerPort}`);
+
+    // Create connection to worker
+    const proxyReq = http.request({
+      hostname: "localhost",
+      port: workerPort,
+      path: url,
+      method: "GET",
+      headers: req.headers,
+    });
+
+    proxyReq.on("upgrade", (proxyRes, proxySocket, proxyHead) => {
+      // Send the upgrade response back to the client
+      socket.write(
+        `HTTP/1.1 101 Switching Protocols\r\n` +
+          `Upgrade: websocket\r\n` +
+          `Connection: Upgrade\r\n` +
+          `Sec-WebSocket-Accept: ${proxyRes.headers["sec-websocket-accept"]}\r\n` +
+          `\r\n`
+      );
+
+      // Pipe data between client and worker
+      proxySocket.pipe(socket);
+      socket.pipe(proxySocket);
+
+      proxySocket.on("error", (err) => {
+        log.error(`Worker WebSocket proxy error:`, err);
+        socket.destroy();
+      });
+
+      socket.on("error", (err) => {
+        log.error(`Client WebSocket error:`, err);
+        proxySocket.destroy();
+      });
+    });
+
+    proxyReq.on("error", (err) => {
+      log.error(`WebSocket upgrade error for worker ${workerId}:`, err);
+      socket.destroy();
+    });
+
+    proxyReq.end();
+  });
 }
 
 app.get("/api/env", async (req, res) => {
@@ -159,6 +218,53 @@ app.get("/api/env", async (req, res) => {
 // Add lobbies endpoint to list public games for this worker
 app.get("/api/public_lobbies", async (req, res) => {
   res.send(publicLobbiesJsonStr);
+});
+
+// Proxy middleware for worker routes (/w0/, /w1/, etc.)
+// This is needed when running without nginx (e.g., Dockerfile.simple for Render/Railway)
+app.use((req, res, next) => {
+  const match = req.url.match(/^\/w(\d+)(\/.*)?$/);
+  if (!match) {
+    return next();
+  }
+
+  const workerId = parseInt(match[1]);
+  const workerPath = match[2] || "/";
+
+  // Calculate worker port (base port 3001 + worker ID)
+  const workerPort = 3001 + workerId;
+
+  log.debug(`Proxying ${req.method} ${req.url} to worker ${workerId} on port ${workerPort}`);
+
+  // Create proxy request options
+  const options: http.RequestOptions = {
+    hostname: "localhost",
+    port: workerPort,
+    path: `/w${workerId}${workerPath}${req.url.includes("?") ? "" : ""}`,
+    method: req.method,
+    headers: { ...req.headers, host: `localhost:${workerPort}` },
+  };
+
+  // Preserve query string
+  if (req.url.includes("?")) {
+    const queryStart = req.url.indexOf("?");
+    options.path = `/w${workerId}${workerPath}${req.url.substring(queryStart)}`;
+  }
+
+  const proxyReq = http.request(options, (proxyRes) => {
+    res.writeHead(proxyRes.statusCode || 500, proxyRes.headers);
+    proxyRes.pipe(res);
+  });
+
+  proxyReq.on("error", (err) => {
+    log.error(`Proxy error for worker ${workerId}:`, err);
+    if (!res.headersSent) {
+      res.status(502).json({ error: "Worker unavailable", details: err.message });
+    }
+  });
+
+  // Forward request body
+  req.pipe(proxyReq);
 });
 
 async function fetchLobbies(): Promise<number> {
