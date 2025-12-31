@@ -20,7 +20,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: GAME_ENV
-        value: prod
+        value: dev  # Use dev mode for 2 workers (prod uses 20, too much for free tier)
       - key: PORT
         value: 3000
 
