@@ -56,6 +56,9 @@ RUN rm -rf ./resources/maps
 COPY tsconfig.json ./
 COPY src ./src
 
+# Copy generated assets from build stage (created by sync-assets script)
+COPY --from=build /app/src/assets ./src/assets
+
 ARG GIT_COMMIT=unknown
 RUN echo "$GIT_COMMIT" > static/commit.txt
 ENV GIT_COMMIT="$GIT_COMMIT"
