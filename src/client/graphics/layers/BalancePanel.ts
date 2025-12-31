@@ -250,7 +250,7 @@ export class BalancePanel extends LitElement implements Layer {
     if (this.isCollapsed) {
       return html`
         <div
-          class="fixed bottom-4 left-4 z-[1000] bg-slate-800/90 border border-slate-600 rounded-lg shadow-xl cursor-pointer hover:bg-slate-700/90 transition-colors"
+          class="fixed top-20 left-4 z-[1000] bg-slate-800/90 border border-slate-600 rounded-lg shadow-xl cursor-pointer hover:bg-slate-700/90 transition-colors"
           @click="${this.toggleCollapsed}"
         >
           <div
@@ -265,7 +265,7 @@ export class BalancePanel extends LitElement implements Layer {
 
     return html`
       <div
-        class="fixed bottom-4 left-4 z-[1000] bg-slate-800/95 border border-slate-600 rounded-lg shadow-xl"
+        class="fixed top-20 left-4 z-[1000] bg-slate-800/95 border border-slate-600 rounded-lg shadow-xl"
         style="width: 300px; max-height: 70vh; display: flex; flex-direction: column;"
       >
         <div
