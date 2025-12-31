@@ -1,17 +1,17 @@
 {
   "map": {
     "height": 1024,
-    "num_land_tiles": 596856,
+    "num_land_tiles": 516511,
     "width": 1536
   },
   "map16x": {
     "height": 256,
-    "num_land_tiles": 35800,
+    "num_land_tiles": 31184,
     "width": 384
   },
   "map4x": {
     "height": 512,
-    "num_land_tiles": 146624,
+    "num_land_tiles": 127607,
     "width": 768
   },
   "name": "Julie",
